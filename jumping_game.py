@@ -137,7 +137,7 @@ while run:
             lives -= 1
             lost_lives.append(e)
         collided.remove(e)
-
+    # Check lives
     if lives == 0:
         run = False
     # Move polygons
@@ -149,7 +149,7 @@ while run:
             e.c2 = (e.c2[0] - POLYGON_VEL, e.c2[1])
             e.c3 = (e.c3[0] - POLYGON_VEL, e.c3[1])
             e.c4 = (e.c4[0] - POLYGON_VEL, e.c4[1])
-    
+
     draw_char()
     draw_life(lives)
     pygame.display.update()

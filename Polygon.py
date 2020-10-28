@@ -1,5 +1,5 @@
 class Polygon:
-
+    # Square
     polygons = []
     length = 20
 
