@@ -142,7 +142,7 @@ while run:
         run = False
     # Move polygons
     for e in Polygon.polygons:
-        if e.c1[0] - POLYGON_VEL <= 0:
+        if e.offscreen:
             e.remove_polygon(e)
         else:
             e.c1 = (e.c1[0] - POLYGON_VEL, e.c1[1])
