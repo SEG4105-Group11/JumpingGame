@@ -2,6 +2,7 @@ class Polygon:
     # Square
     polygons = []
     length = 20
+    vel = 5
 
     def __init__(self, c1, c2, c3, c4, offscreen=False):
         self.c1 = c1
