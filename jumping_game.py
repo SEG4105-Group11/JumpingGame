@@ -2,6 +2,9 @@ import pygame
 import random
 from Polygon import Polygon
 from Character import Character
+from Utility import Utility
+
+
 pygame.init()
 
 # Window setup
@@ -16,13 +19,10 @@ first_polygon.add_polygon(first_polygon)
 previous_polygon = first_polygon
 collided = []
 lost_lives = []
-clock = pygame.time.Clock()
 
 # Character setup
-char = Character(10, 10, 5, w)
+char = Character(0, SCREENHEIGHT - Character.height)
 char.make_char()
-char.x = 0
-char.y = SCREENHEIGHT - char.height
 
 # Pygame text setup
 pygame.display.set_caption("First Game")
@@ -31,14 +31,7 @@ game_over = font.render("Game Over! Better luck next time!", True, (255, 0, 0), 
 text_game_over = game_over.get_rect()
 text_game_over.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2))
 
-
-def draw_life(num):
-    lives_left = font.render("Lives left: " + str(num), True, (255, 0, 0), bg)
-    text_lives_left = lives_left.get_rect()
-    text_lives_left.center = (SCREENWIDTH - 100, 50)
-    w.blit(lives_left, text_lives_left)
-
-
+clock = pygame.time.Clock()
 run = True
 # main
 while run:
@@ -64,7 +57,7 @@ while run:
     else:
         char.left = False
         char.right = False
-        walk = 0
+        char.walk = 0
 
     if not char.isJump:
         if keys[pygame.K_SPACE]:
@@ -88,46 +81,31 @@ while run:
             char.isJump = False
             char.jump = 10
 
+    u = Utility()
+    
     # Create next polygon
-    distance = random.randint(200, 300)
-    coord1 = (previous_polygon.c1[0] + distance, previous_polygon.c1[1])
-    coord2 = (previous_polygon.c2[0] + distance, previous_polygon.c2[1])
-    coord3 = (previous_polygon.c3[0] + distance, previous_polygon.c3[1])
-    coord4 = (previous_polygon.c4[0] + distance, previous_polygon.c4[1])
-    if coord4[0] <= SCREENWIDTH:
-        next_polygon = Polygon(coord1, coord2, coord3, coord4)
-        next_polygon.add_polygon(next_polygon)
-        previous_polygon = next_polygon
-
+    previous_polygon = first_polygon.create_next(previous_polygon, SCREENWIDTH)
     w.blit(bg, (0, 0))
 
     # Draw polygons
-    for e in Polygon.polygons:
-        pygame.draw.polygon(w, (255, 0, 0), [e.c1, e.c2, e.c3, e.c4])
-        if e.is_collision((char.x, char.y + char.height), (char.x + char.width, char.y + char.height)) and e not in collided:
-            collided.append(e)
-    pygame.display.update()
+    u.draw_polygons(first_polygon, char, w, collided)
+
     # Decrement lives
     for e in collided:
         if e not in lost_lives and char.lives - 1 >= 0:
             char.lives -= 1
             lost_lives.append(e)
         collided.remove(e)
+
     # Check lives
     if char.lives == 0:
         run = False
-    # Move polygons
-    for e in Polygon.polygons:
-        if e.offscreen:
-            e.remove_polygon(e)
-        else:
-            e.c1 = (e.c1[0] - Polygon.vel, e.c1[1])
-            e.c2 = (e.c2[0] - Polygon.vel, e.c2[1])
-            e.c3 = (e.c3[0] - Polygon.vel, e.c3[1])
-            e.c4 = (e.c4[0] - Polygon.vel, e.c4[1])
 
-    char.draw_char()
-    draw_life(char.lives)
+    # Move polygons
+    first_polygon.move_polygons()
+
+    u.draw_char(char, w)
+    u.draw_life(char.lives, font, w, bg, SCREENWIDTH - 100, 50)
     pygame.display.update()
 
 w.blit(game_over, text_game_over)
