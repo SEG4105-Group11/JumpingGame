@@ -4,7 +4,7 @@ import pygame
 class Character:
     vel = 10
     jump = 10
-    lives = 5
+    lives = 10
     width = 24
     height = 47
     walk = 0
@@ -27,4 +27,3 @@ class Character:
 
     def make_char(self):
         self.char_img = pygame.image.load("images/standing.png")
-

@@ -9,6 +9,12 @@ class Utility:
         text_lives_left.center = (x, y)
         w.blit(lives_left, text_lives_left)
 
+    def draw_score(self, num, font, w, bg, x, y):
+        score = font.render("Score: " + str(num), True, (255, 0, 0), bg)
+        text_score = score.get_rect()
+        text_score.center = (x, y)
+        w.blit(score, text_score)
+
     def draw_char(self, char, w):
         if char.walk + 1 >= 27:
             char.walk = 0
@@ -24,6 +30,12 @@ class Utility:
     def draw_polygons(self, p, char, w, collided):
         for e in p.polygons:
             pygame.draw.polygon(w, (255, 0, 0), [e.c1, e.c2, e.c3, e.c4])
-            if e.is_collision((char.x, char.y + char.height),
-                              (char.x + char.width, char.y + char.height)) and e not in collided:
+            if e.is_collision((char.x, char.y + char.height), (char.x + char.width, char.y + char.height)) and e not in collided:
                 collided.append(e)
+
+    def draw_projectiles(self, projectile, char, w, collided):
+        for p in projectile.projectiles:
+            pygame.draw.circle(w, (255, 0, 0), (p.x, p.y), p.radius)
+            if p.is_collision(char) and p not in collided:
+                collided.append(p)
+

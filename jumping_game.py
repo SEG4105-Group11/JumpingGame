@@ -1,9 +1,9 @@
 import pygame
-import random
+import time
 from Polygon import Polygon
 from Character import Character
 from Utility import Utility
-
+from Projectile import Projectile
 
 pygame.init()
 
@@ -17,12 +17,19 @@ bg = pygame.image.load("images/bg.jpg")
 first_polygon = Polygon((100, SCREENHEIGHT), (100, SCREENHEIGHT - Polygon.length), (100 + Polygon.length, SCREENHEIGHT - Polygon.length), (100 + Polygon.length, SCREENHEIGHT))
 first_polygon.add_polygon(first_polygon)
 previous_polygon = first_polygon
-collided = []
-lost_lives = []
+collided_polygons = []
+polygon_lost_lives = []
 
 # Character setup
 char = Character(0, SCREENHEIGHT - Character.height)
 char.make_char()
+
+# Projectile setup
+first_projectile = Projectile(SCREENWIDTH-Projectile.radius, SCREENHEIGHT - 2*char.height)
+first_projectile.add_projectile(first_projectile)
+previous_projectile = first_projectile
+collided_projectiles = []
+projectile_lost_lives = []
 
 # Pygame text setup
 pygame.display.set_caption("First Game")
@@ -31,11 +38,19 @@ game_over = font.render("Game Over! Better luck next time!", True, (255, 0, 0), 
 text_game_over = game_over.get_rect()
 text_game_over.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2))
 
+score = 0
 clock = pygame.time.Clock()
+start = time.time()
+end = 0
 run = True
+
 # main
 while run:
-    clock.tick(27)
+    clock.tick(30)
+    score += 20
+
+    w.blit(bg, (0, 0))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -82,32 +97,54 @@ while run:
             char.jump = 10
 
     u = Utility()
-    
+
     # Create next polygon
     previous_polygon = first_polygon.create_next(previous_polygon, SCREENWIDTH)
-    w.blit(bg, (0, 0))
 
     # Draw polygons
-    u.draw_polygons(first_polygon, char, w, collided)
+    u.draw_polygons(first_polygon, char, w, collided_polygons)
+
+    # Create next projectile
+    previous_projectile = first_projectile.create_next(previous_projectile, SCREENWIDTH)
+
+    # Draw projectiles
+    u.draw_projectiles(first_projectile, char, w, collided_projectiles)
 
     # Decrement lives
-    for e in collided:
-        if e not in lost_lives and char.lives - 1 >= 0:
+
+    # Check Polygon collision
+    for e in collided_polygons:
+        if e not in polygon_lost_lives and char.lives - 1 >= 0:
             char.lives -= 1
-            lost_lives.append(e)
-        collided.remove(e)
+            polygon_lost_lives.append(e)
+            collided_polygons.remove(e)
+
+    # Check Projectile collision
+    for p in collided_projectiles:
+        if p not in projectile_lost_lives and char.lives - 1 >= 0:
+            char.lives -= 1
+            projectile_lost_lives.append(p)
+            collided_projectiles.remove(p)
 
     # Check lives
     if char.lives == 0:
         run = False
+        end = time.time()
 
     # Move polygons
     first_polygon.move_polygons()
 
+    # Move projectiles
+    first_projectile.move_projectiles()
+
+    # Draw character and UI
     u.draw_char(char, w)
     u.draw_life(char.lives, font, w, bg, SCREENWIDTH - 100, 50)
+    u.draw_score(score, font, w , bg, 80, 50)
     pygame.display.update()
 
+# Display end screen
+game_over = font.render("Game Over! You were alive for " + str(int(end - start)) + " seconds.", True, (255, 0, 0), bg)
 w.blit(game_over, text_game_over)
 pygame.display.update()
 pygame.time.delay(1000)
