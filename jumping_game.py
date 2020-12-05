@@ -128,9 +128,6 @@ while run:
     # Check lives
     if char.lives == 0:
         run = False
-        end = time.time()
-
-    end = time.time()
 
     # Move polygons
     first_polygon.move_polygons()
@@ -141,10 +138,11 @@ while run:
     # Draw character and UI
     u.draw_char(char, w)
     u.draw_life(char.lives, font, w, bg, SCREENWIDTH - 100, 50)
-    u.draw_score(score, font, w , bg, 80, 50)
+    u.draw_score(score, font, w, bg, 80, 50)
     pygame.display.update()
 
 # Display end screen
+end = time.time()
 game_over = font.render("Game Over! You were alive for " + str(int(end - start)) + " seconds.", True, (255, 0, 0), bg)
 w.blit(game_over, text_game_over)
 pygame.display.update()
