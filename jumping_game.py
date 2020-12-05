@@ -41,7 +41,6 @@ text_game_over.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2))
 score = 0
 clock = pygame.time.Clock()
 start = time.time()
-end = 0
 run = True
 
 # main
@@ -130,6 +129,8 @@ while run:
     if char.lives == 0:
         run = False
         end = time.time()
+
+    end = time.time()
 
     # Move polygons
     first_polygon.move_polygons()
