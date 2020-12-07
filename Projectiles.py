@@ -24,7 +24,7 @@ class Projectiles:
 
     def create_next(self, prev, screenwidth):
         distance = random.randint(Projectiles.MIN_DISTANCE, Projectiles.MAX_DISTANCE)
-        if prev.x + distance <= screenwidth:
+        if prev.x + distance - Projectile.RADIUS <= screenwidth:
             next_projectile = Projectile(prev.x + distance, prev.y)
             self.add_projectile(next_projectile)
             prev = next_projectile
