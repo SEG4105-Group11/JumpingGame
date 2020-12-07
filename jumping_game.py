@@ -8,6 +8,7 @@ from Projectiles import Projectiles
 from Polygons import Polygons
 
 pygame.init()
+pygame.mixer.init()
 
 # Window setup
 SCREENHEIGHT = 480
@@ -63,6 +64,22 @@ def main(num_lives, v1=Polygon.VELOCITY, v2=Projectile.VELOCITY):
     char = Character(0, SCREENHEIGHT - Character.height)
     char.set_lives(num_lives)
 
+    # Game music setup
+    if num_lives == 10:
+        pygame.mixer.music.load("easy.mp3")
+    elif num_lives == 5:
+        pygame.mixer.music.load("medium.mp3")
+    elif num_lives == 3:
+        pygame.mixer.music.load("hard.mp3")
+    elif num_lives == 1:
+        pygame.mixer.music.load("god.mp3")
+
+    pygame.mixer.music.set_volume(0.1)
+    if num_lives > 1:
+        pygame.mixer.music.play(-1)
+    else:
+        pygame.mixer.music.play(-1, 3)
+        
     score = 0
     clock = pygame.time.Clock()
     start = time.time()
@@ -135,6 +152,7 @@ def main(num_lives, v1=Polygon.VELOCITY, v2=Projectile.VELOCITY):
 
         # Check lives
         if char.lives == 0:
+            pygame.mixer.music.stop()
             game_run = False
 
         # Move polygons
