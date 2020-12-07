@@ -29,7 +29,7 @@ class Polygons:
         coord3 = (prev.c3[0] + distance, prev.c3[1])
         coord4 = (prev.c4[0] + distance, prev.c4[1])
 
-        if coord4[0] <= screenwidth:
+        if coord1[0] <= screenwidth:
             next_polygon = Polygon(coord1, coord2, coord3, coord4)
             self.add_polygon(next_polygon)
             prev = next_polygon

@@ -79,7 +79,7 @@ def main(num_lives, v1=Polygon.VELOCITY, v2=Projectile.VELOCITY):
         pygame.mixer.music.play(-1)
     else:
         pygame.mixer.music.play(-1, 3)
-        
+
     score = 0
     clock = pygame.time.Clock()
     start = time.time()
