@@ -27,15 +27,10 @@ class Utility:
         else:
             w.blit(char.char_img, (char.x, char.y))
 
-    def draw_polygons(self, p, char, w, collided):
-        for e in p.polygons:
-            pygame.draw.polygon(w, (255, 0, 0), [e.c1, e.c2, e.c3, e.c4])
-            if e.is_collision((char.x, char.y + char.height), (char.x + char.width, char.y + char.height)) and e not in collided:
-                collided.append(e)
+    def draw_polygons(self, polygons, w):
+        for p in polygons.polygons:
+            pygame.draw.polygon(w, (255, 0, 0), [p.c1, p.c2, p.c3, p.c4])
 
-    def draw_projectiles(self, projectile, char, w, collided):
-        for p in projectile.projectiles:
-            pygame.draw.circle(w, (255, 0, 0), (p.x, p.y), p.radius)
-            if p.is_collision(char) and p not in collided:
-                collided.append(p)
-
+    def draw_projectiles(self, projectiles, w):
+        for p in projectiles.projectiles:
+            pygame.draw.circle(w, (255, 0, 0), (p.x, p.y), p.RADIUS)

@@ -4,147 +4,202 @@ from Polygon import Polygon
 from Character import Character
 from Utility import Utility
 from Projectile import Projectile
+from Projectiles import Projectiles
+from Polygons import Polygons
 
 pygame.init()
 
 # Window setup
 SCREENHEIGHT = 480
 SCREENWIDTH = 800
+main_menu = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
+main_menu_bg = pygame.image.load("images/main_menu.png")
 w = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 bg = pygame.image.load("images/bg.jpg")
-
-# Polygon setup
-first_polygon = Polygon((100, SCREENHEIGHT), (100, SCREENHEIGHT - Polygon.length), (100 + Polygon.length, SCREENHEIGHT - Polygon.length), (100 + Polygon.length, SCREENHEIGHT))
-first_polygon.add_polygon(first_polygon)
-previous_polygon = first_polygon
-collided_polygons = []
-polygon_lost_lives = []
-
-# Character setup
-char = Character(0, SCREENHEIGHT - Character.height)
-char.make_char()
-
-# Projectile setup
-first_projectile = Projectile(SCREENWIDTH-Projectile.radius, SCREENHEIGHT - 2*char.height)
-first_projectile.add_projectile(first_projectile)
-previous_projectile = first_projectile
-collided_projectiles = []
-projectile_lost_lives = []
 
 # Pygame text setup
 pygame.display.set_caption("First Game")
 font = pygame.font.SysFont("Arial", 32, 1)
-game_over = font.render("Game Over! Better luck next time!", True, (255, 0, 0), bg)
-text_game_over = game_over.get_rect()
-text_game_over.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2))
 
-score = 0
-clock = pygame.time.Clock()
-start = time.time()
-run = True
+# Main menu setup
+difficulty = font.render("Choose your difficulty:", True, (255, 0, 0), main_menu_bg)
+easy = font.render("Easy", True, (255, 0, 0), main_menu_bg)
+medium = font.render("Medium", True, (255, 0, 0), main_menu_bg)
+hard = font.render("Hard", True, (255, 0, 0), main_menu_bg)
+god = font.render("God", True, (255, 0, 0), main_menu_bg)
+text_difficulty = difficulty.get_rect()
+text_easy = easy.get_rect()
+text_medium = medium.get_rect()
+text_hard = hard.get_rect()
+text_god = god.get_rect()
+text_difficulty.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2) - 100)
+text_easy.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2))
+text_medium.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2) + 50)
+text_hard.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2) + 100)
+text_god.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2) + 150)
+
 
 # main
-while run:
-    clock.tick(30)
-    score += 20
+def main(num_lives, v1=Polygon.VELOCITY, v2=Projectile.VELOCITY):
+    # Polygon setup
+    Polygon.VELOCITY = v1
+    polygons = Polygons()
+    first_polygon = Polygon((int(SCREENWIDTH/3), SCREENHEIGHT), (int(SCREENWIDTH/3), SCREENHEIGHT - Polygon.LENGTH), (int(SCREENWIDTH/3) + Polygon.LENGTH, SCREENHEIGHT - Polygon.LENGTH), (int(SCREENWIDTH/3) + Polygon.LENGTH, SCREENHEIGHT))
+    polygons.add_polygon(first_polygon)
+    previous_polygon = first_polygon
+    collided_polygons = []
+    polygon_lost_lives = []
 
-    w.blit(bg, (0, 0))
+    # Projectile setup
+    Projectile.VELOCITY = v2
+    projectiles = Projectiles()
+    first_projectile = Projectile(SCREENWIDTH - Projectile.RADIUS, SCREENHEIGHT - 2 * Character.height)
+    projectiles.add_projectile(first_projectile)
+    previous_projectile = first_projectile
+    collided_projectiles = []
+    projectile_lost_lives = []
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+    # Character setup
+    char = Character(0, SCREENHEIGHT - Character.height)
+    char.set_lives(num_lives)
 
-    keys = pygame.key.get_pressed()
+    score = 0
+    clock = pygame.time.Clock()
+    start = time.time()
+    game_run = True
 
-    if keys[pygame.K_a] and char.x - char.vel >= 0:
-        char.x -= char.vel
-        char.left = True
-        char.right = False
-        w.blit(char.char_img, (char.x, char.y))
-        pygame.display.update()
-    elif keys[pygame.K_d] and char.x + char.vel <= SCREENWIDTH - char.width:
-        char.x += char.vel
-        char.left = False
-        char.right = True
-        w.blit(char.char_img, (char.x, char.y))
-        pygame.display.update()
-    else:
-        char.left = False
-        char.right = False
-        char.walk = 0
+    while game_run:
+        w.blit(bg, (0, 0))
+        clock.tick(30)
 
-    if not char.isJump:
-        if keys[pygame.K_SPACE]:
-            char.isJump = True
-            char.left = False
-            char.right = False
-            char.walk = 0
-    else:
-        if char.jump >= - 10:
-            neg = 1
-            if char.jump < 0:
-                neg = -1
-            if char.y - char.jump >= 0:
-                char.y -= char.jump
-                char.jump -= 1
-                w.blit(char.char_img, (char.x, char.y))
-                pygame.display.update()
-            else:
-                char.jump = -char.jump - 1
+        score += 20
+
+        for game_event in pygame.event.get():
+            if game_event.type == pygame.QUIT:
+                game_run = False
+
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_a] and char.x - char.vel >= 0:
+            char.move_left()
+        elif keys[pygame.K_d] and char.x + char.vel <= SCREENWIDTH - char.width:
+            char.move_right()
         else:
-            char.isJump = False
-            char.jump = 10
+            char.set_standing()
 
-    u = Utility()
+        if not char.isJump:
+            if keys[pygame.K_SPACE]:
+                char.set_jump()
+        else:
+            char.jump()
 
-    # Create next polygon
-    previous_polygon = first_polygon.create_next(previous_polygon, SCREENWIDTH)
+        u = Utility()
 
-    # Draw polygons
-    u.draw_polygons(first_polygon, char, w, collided_polygons)
+        # Create next polygon
+        previous_polygon = polygons.create_next(previous_polygon, SCREENWIDTH)
 
-    # Create next projectile
-    previous_projectile = first_projectile.create_next(previous_projectile, SCREENWIDTH)
+        # Draw polygons
+        u.draw_polygons(polygons, w)
 
-    # Draw projectiles
-    u.draw_projectiles(first_projectile, char, w, collided_projectiles)
+        # Create next projectile
+        previous_projectile = projectiles.create_next(previous_projectile, SCREENWIDTH)
 
-    # Decrement lives
+        # Draw projectiles
+        u.draw_projectiles(projectiles, w)
 
-    # Check Polygon collision
-    for e in collided_polygons:
-        if e not in polygon_lost_lives and char.lives - 1 >= 0:
-            char.lives -= 1
-            polygon_lost_lives.append(e)
-            collided_polygons.remove(e)
+        # Check Projectile collision
+        for p in projectiles.projectiles:
+            if p.is_collision(char) and p not in collided_projectiles:
+                collided_projectiles.append(p)
 
-    # Check Projectile collision
-    for p in collided_projectiles:
-        if p not in projectile_lost_lives and char.lives - 1 >= 0:
-            char.lives -= 1
-            projectile_lost_lives.append(p)
-            collided_projectiles.remove(p)
+        # Check Polygon collision
+        for p in polygons.polygons:
+            if p.is_collision(char) and p not in collided_polygons:
+                collided_polygons.append(p)
 
-    # Check lives
-    if char.lives == 0:
-        run = False
+        # Decrement lives
 
-    # Move polygons
-    first_polygon.move_polygons()
+        # Check Polygon collision
+        for p in collided_polygons:
+            if p not in polygon_lost_lives and char.lives - 1 >= 0:
+                char.lives -= 1
+                polygon_lost_lives.append(p)
+                collided_polygons.remove(p)
 
-    # Move projectiles
-    first_projectile.move_projectiles()
+        # Check Projectile collision
+        for p in collided_projectiles:
+            if p not in projectile_lost_lives and char.lives - 1 >= 0:
+                char.lives -= 1
+                projectile_lost_lives.append(p)
+                collided_projectiles.remove(p)
 
-    # Draw character and UI
-    u.draw_char(char, w)
-    u.draw_life(char.lives, font, w, bg, SCREENWIDTH - 100, 50)
-    u.draw_score(score, font, w, bg, 80, 50)
+        # Check lives
+        if char.lives == 0:
+            game_run = False
+
+        # Move polygons
+        polygons.move_polygons()
+
+        # Move projectiles
+        projectiles.move_projectiles()
+
+        # Draw character and UI
+        u.draw_char(char, w)
+        u.draw_life(char.lives, font, w, bg, SCREENWIDTH - 100, 50)
+        u.draw_score(score, font, w, bg, 100, 50)
+        pygame.display.update()
+
+    # Display end screen
+    end = time.time()
+    game_over = font.render("Game Over! You were alive for " + str(int(end - start)) + " seconds.", True, (255, 0, 0), bg)
+    text_game_over = game_over.get_rect()
+    text_game_over.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2))
+    w.blit(game_over, text_game_over)
+    pygame.display.update()
+    pygame.time.delay(1000)
+    pygame.quit()
+
+
+main_menu_run = True
+lives = 0
+projectile_velocity = Projectile.VELOCITY
+block_velocity = Polygon.VELOCITY
+
+while main_menu_run:
+    main_menu.blit(main_menu_bg, (0, 0))
+    main_menu.blit(difficulty, text_difficulty)
+    main_menu.blit(easy, text_easy)
+    main_menu.blit(medium, text_medium)
+    main_menu.blit(hard, text_hard)
+    main_menu.blit(god, text_god)
+
+    for main_menu_event in pygame.event.get():
+        if main_menu_event.type == pygame.QUIT:
+            main_menu_run = False
+        if main_menu_event.type == pygame.MOUSEBUTTONUP:
+            mouse_pos = pygame.mouse.get_pos()
+
+            if text_easy.collidepoint(mouse_pos):
+                lives = 10
+                projectile_velocity = int(0.5 * Projectile.VELOCITY)
+                block_velocity = int(0.5 * Polygon.VELOCITY)
+                main_menu_run = False
+            elif text_medium.collidepoint(mouse_pos):
+                lives = 5
+                projectile_velocity = int(Projectile.VELOCITY)
+                block_velocity = int(Polygon.VELOCITY)
+                main_menu_run = False
+            elif text_hard.collidepoint(mouse_pos):
+                lives = 3
+                projectile_velocity = int(1.5 * Projectile.VELOCITY)
+                block_velocity = int(1.5 * Polygon.VELOCITY)
+                main_menu_run = False
+            elif text_god.collidepoint(mouse_pos):
+                lives = 1
+                projectile_velocity = int(2 * Projectile.VELOCITY)
+                block_velocity = int(2 * Polygon.VELOCITY)
+                main_menu_run = False
+
     pygame.display.update()
 
-# Display end screen
-end = time.time()
-game_over = font.render("Game Over! You were alive for " + str(int(end - start)) + " seconds.", True, (255, 0, 0), bg)
-w.blit(game_over, text_game_over)
-pygame.display.update()
-pygame.time.delay(1000)
-pygame.quit()
+main(lives, block_velocity, projectile_velocity)
