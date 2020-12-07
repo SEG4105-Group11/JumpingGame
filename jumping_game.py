@@ -20,20 +20,20 @@ bg = pygame.image.load("images/bg.jpg")
 
 # Pygame text setup
 pygame.display.set_caption("First Game")
-font = pygame.font.SysFont("Arial", 32, 1)
+font = pygame.font.SysFont("Arial", 32, True)
 
 # Main menu setup
-difficulty = font.render("Choose your difficulty:", True, (255, 0, 0), main_menu_bg)
-easy = font.render("Easy", True, (255, 0, 0), main_menu_bg)
-medium = font.render("Medium", True, (255, 0, 0), main_menu_bg)
-hard = font.render("Hard", True, (255, 0, 0), main_menu_bg)
-god = font.render("God", True, (255, 0, 0), main_menu_bg)
+difficulty = font.render("Choose your difficulty:", True, (255, 0, 0))
+easy = font.render("Easy", True, (255, 0, 0))
+medium = font.render("Medium", True, (255, 0, 0))
+hard = font.render("Hard", True, (255, 0, 0))
+god = font.render("God", True, (255, 0, 0))
 text_difficulty = difficulty.get_rect()
 text_easy = easy.get_rect()
 text_medium = medium.get_rect()
 text_hard = hard.get_rect()
 text_god = god.get_rect()
-text_difficulty.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2) - 100)
+text_difficulty.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2) - 70)
 text_easy.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2))
 text_medium.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2) + 50)
 text_hard.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2) + 100)
@@ -75,10 +75,7 @@ def main(num_lives, v1=Polygon.VELOCITY, v2=Projectile.VELOCITY):
         pygame.mixer.music.load("god.mp3")
 
     pygame.mixer.music.set_volume(0.1)
-    if num_lives > 1:
-        pygame.mixer.music.play(-1)
-    else:
-        pygame.mixer.music.play(-1, 3)
+    pygame.mixer.music.play(-1, 3)
 
     score = 0
     clock = pygame.time.Clock()
@@ -89,7 +86,7 @@ def main(num_lives, v1=Polygon.VELOCITY, v2=Projectile.VELOCITY):
         w.blit(bg, (0, 0))
         clock.tick(30)
 
-        score += 20
+        score += 23
 
         for game_event in pygame.event.get():
             if game_event.type == pygame.QUIT:
@@ -163,13 +160,13 @@ def main(num_lives, v1=Polygon.VELOCITY, v2=Projectile.VELOCITY):
 
         # Draw character and UI
         u.draw_char(char, w)
-        u.draw_life(char.lives, font, w, bg, SCREENWIDTH - 100, 50)
-        u.draw_score(score, font, w, bg, 100, 50)
+        u.draw_life(char.lives, font, w, SCREENWIDTH)
+        u.draw_score(score, font, w)
         pygame.display.update()
 
     # Display end screen
     end = time.time()
-    game_over = font.render("Game Over! You were alive for " + str(int(end - start)) + " seconds.", True, (255, 0, 0), bg)
+    game_over = font.render("Game Over! You were alive for " + str(int(end - start)) + " seconds.", True, (255, 0, 0))
     text_game_over = game_over.get_rect()
     text_game_over.center = (int(SCREENWIDTH/2), int(SCREENHEIGHT/2))
     w.blit(game_over, text_game_over)
@@ -183,6 +180,7 @@ lives = 0
 projectile_velocity = Projectile.VELOCITY
 block_velocity = Polygon.VELOCITY
 
+# Run main menu
 while main_menu_run:
     main_menu.blit(main_menu_bg, (0, 0))
     main_menu.blit(difficulty, text_difficulty)
@@ -220,4 +218,5 @@ while main_menu_run:
 
     pygame.display.update()
 
+# Run game
 main(lives, block_velocity, projectile_velocity)

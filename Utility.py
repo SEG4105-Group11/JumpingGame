@@ -3,16 +3,18 @@ import pygame
 
 class Utility:
 
-    def draw_life(self, num, font, w, bg, x, y):
-        lives_left = font.render("Lives left: " + str(num), True, (255, 0, 0), bg)
+    def draw_life(self, num, font, w, screen_width):
+        lives_left = font.render("Lives left: " + str(num), True, (255, 0, 0))
         text_lives_left = lives_left.get_rect()
-        text_lives_left.center = (x, y)
+        text_size = font.size("Lives left: " + str(num))
+        text_lives_left.center = (screen_width - int(text_size[0] / 2) - 10, 50)
         w.blit(lives_left, text_lives_left)
 
-    def draw_score(self, num, font, w, bg, x, y):
-        score = font.render("Score: " + str(num), True, (255, 0, 0), bg)
+    def draw_score(self, num, font, w):
+        score = font.render("Score: " + str(num), True, (255, 0, 0))
         text_score = score.get_rect()
-        text_score.center = (x, y)
+        text_size = font.size("Score: " + str(num))
+        text_score.center = (int(text_size[0] / 2) + 10, 50)
         w.blit(score, text_score)
 
     def draw_char(self, char, w):

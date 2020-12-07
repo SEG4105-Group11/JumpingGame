@@ -1,6 +1,3 @@
-import random
-
-
 class Projectile:
     RADIUS = 10
     VELOCITY = 10
