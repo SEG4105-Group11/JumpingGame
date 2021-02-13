@@ -23,6 +23,10 @@ class Character:
         self.isJump = False
         self.left = False
         self.right = False
+        self.score = 0
+
+    def add_score(self, score):
+        self.score += score
 
     def move_left(self):
         self.x -= self.vel

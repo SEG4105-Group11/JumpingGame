@@ -10,6 +10,9 @@ from Polygons import Polygons
 pygame.init()
 pygame.mixer.init()
 
+# Game variables
+SCORE_INCREMENT = 25
+
 # Window setup
 SCREENHEIGHT = 480
 SCREENWIDTH = 800
@@ -86,7 +89,7 @@ def main(num_lives, v1=Polygon.VELOCITY, v2=Projectile.VELOCITY):
         w.blit(bg, (0, 0))
         clock.tick(30)
 
-        score += 23
+        char.add_score(SCORE_INCREMENT)
 
         for game_event in pygame.event.get():
             if game_event.type == pygame.QUIT:
@@ -161,7 +164,7 @@ def main(num_lives, v1=Polygon.VELOCITY, v2=Projectile.VELOCITY):
         # Draw character and UI
         u.draw_char(char, w)
         u.draw_life(char.lives, font, w, SCREENWIDTH)
-        u.draw_score(score, font, w)
+        u.draw_score(char.score, font, w)
         pygame.display.update()
 
     # Display end screen
