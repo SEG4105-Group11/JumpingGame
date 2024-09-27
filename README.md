@@ -6,5 +6,5 @@ This is a simple jumping game implemented with pygame. Players have to jump over
 |Akarsh Gharge|300113523|Product Owner|
 |Haris Vohra|300174288|Scrum Master|
 |Matthew Sia|300192570|Developer|
-|Benjamin Gabriel||Developer|
+|Benjamin Gabriel|300186031|Developer|
 |Ghait Ouled Amar Ben Cheikh||Developer|
