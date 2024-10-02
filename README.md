@@ -10,7 +10,8 @@ This is a simple jumping game implemented with pygame. Players have to jump over
 |Ghait Ouled Amar Ben Cheikh|300226766|Developer|
 
 # 8. Tools & Resources
-Below is the list of tools and resources we are planning to use for this project.
+Below is the list of tools and resources we are planning to use for this project. This list is not subject to change unless major roadblocks are encountered. We will probably give more details in
+the risk management section.
 
 | Item | Description |
 | :--: | :---------- |
