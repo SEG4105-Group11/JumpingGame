@@ -1,4 +1,4 @@
-from Polygon import Polygon
+from polygon import Polygon
 import random
 
 
