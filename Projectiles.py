@@ -1,4 +1,4 @@
-from Projectile import Projectile
+from projectile import Projectile
 import random
 
 
