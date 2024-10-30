@@ -93,6 +93,7 @@ class Game:
         pygame.mixer.music.load(f"audio/{self.difficulty}.mp3")
         pygame.mixer.music.set_volume(0.1)
         pygame.mixer.music.play(-1, 3)
+        self.collision_sound = pygame.mixer.Sound("audio/collision.mp3")
 
         self.timer.start()
 
@@ -153,6 +154,7 @@ class Game:
             if p not in self.polygon_lost_lives and self.char.lives - 1 >= 0:
                 self.char.lives -= 1
                 self.offset = shake()
+                pygame.mixer.Sound.play(self.collision_sound)
                 self.polygon_lost_lives.append(p)
                 self.collided_polygons.remove(p)
 
@@ -161,6 +163,7 @@ class Game:
             if p not in self.projectile_lost_lives and self.char.lives - 1 >= 0:
                 self.char.lives -= 1
                 self.offset = shake()
+                pygame.mixer.Sound.play(self.collision_sound)
                 self.projectile_lost_lives.append(p)
                 self.collided_projectiles.remove(p)
 
