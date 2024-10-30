@@ -1,5 +1,6 @@
 import globals
 import colors
+import pygame
 
 
 def draw_game_over(window, game):
@@ -17,3 +18,15 @@ def draw_game_over(window, game):
     game_over_rect.center = center
     game_over_rect.top = padding
     window.blit(game_over, game_over_rect)
+
+    play_again = globals.font.render("Play Again", True, colors.red)
+    play_again_rect = play_again.get_rect()
+    play_again_rect.center = center
+    play_again_rect.bottom = globals.SCREENHEIGHT - padding
+    window.blit(play_again, play_again_rect)
+
+    if pygame.event.get(pygame.MOUSEBUTTONUP):
+        mouse_pos = pygame.mouse.get_pos()
+
+        if play_again_rect.collidepoint(mouse_pos):
+            globals.global_mode = "menu"
