@@ -1,8 +1,3 @@
-import os
-import highscores
-import datetime
-import json
-import utils
 import pygame
 import globals
 from timer import Timer
@@ -11,25 +6,6 @@ from projectiles import Projectiles
 from polygon import Polygon
 from polygons import Polygons
 from character import Character
-import itertools
-
-
-# REFERENCE: https://github.com/kidscancode/gamedev/blob/master/tutorials/examples/shake.py#L27
-# this function creates our shake-generator
-# it "moves" the screen to the left and right
-# three times by yielding (-5, 0), (-10, 0),
-# ... (-20, 0), (-15, 0) ... (20, 0) three times,
-# then keeps yielding (0, 0)
-def shake():
-    s = -1
-    for _ in range(0, 3):
-        for x in range(0, 20, 5):
-            yield (x * s, 0)
-        for x in range(20, 0, 5):
-            yield (x * s, 0)
-        s *= -1
-    while True:
-        yield (0, 0)
 
 
 class Game:
@@ -48,7 +24,6 @@ class Game:
         self.bg = pygame.image.load("images/bg.jpg")
         self.difficulty = None
         self.timer = Timer()
-        self.offset = itertools.repeat((0, 0))
 
     def pause(self):
         self.timer.pause()
@@ -57,6 +32,10 @@ class Game:
         self.timer.resume()
 
     def initialize(self):
+        assert (
+            self.difficulty is not None
+        ), "Tried to initialize game without difficulty"
+
         # Polygon setup
         Polygon.VELOCITY *= self.difficulty_parameters[self.difficulty][1]
         self.polygons = Polygons()
@@ -94,7 +73,6 @@ class Game:
         pygame.mixer.music.load(f"audio/{self.difficulty}.mp3")
         pygame.mixer.music.set_volume(0.1)
         pygame.mixer.music.play(-1, 3)
-        self.collision_sound = pygame.mixer.Sound("audio/collision.mp3")
 
         self.timer.start()
 
@@ -154,8 +132,6 @@ class Game:
         for p in self.collided_polygons:
             if p not in self.polygon_lost_lives and self.char.lives - 1 >= 0:
                 self.char.lives -= 1
-                self.offset = shake()
-                pygame.mixer.Sound.play(self.collision_sound)
                 self.polygon_lost_lives.append(p)
                 self.collided_polygons.remove(p)
 
@@ -163,8 +139,6 @@ class Game:
         for p in self.collided_projectiles:
             if p not in self.projectile_lost_lives and self.char.lives - 1 >= 0:
                 self.char.lives -= 1
-                self.offset = shake()
-                pygame.mixer.Sound.play(self.collision_sound)
                 self.projectile_lost_lives.append(p)
                 self.collided_projectiles.remove(p)
 
@@ -172,7 +146,6 @@ class Game:
         if self.char.lives == 0:
             pygame.mixer.music.stop()
             self.timer.stop()
-            self.save_score()
             globals.global_mode = "gameover"
 
         # Move polygons
@@ -211,37 +184,3 @@ class Game:
         text_size = globals.font.size("Time Alive: " + time_alive)
         text_score.center = (int(text_size[0] / 2) + 10, 50)
         self.window.blit(score, text_score)
-
-    def save_score(self):
-        save_dir = utils.get_save_dir()
-        if not os.path.exists(save_dir):
-            os.makedirs(save_dir)
-
-        user = os.getlogin()
-        date = datetime.date.today().strftime("%x")
-        score = round(self.timer.get_time(), 3)
-
-        savefile = os.path.join(save_dir, "highscores.json")
-        if not os.path.exists(savefile):
-            scores = {k: [] for k in self.difficulty_parameters}
-            scores[self.difficulty].append((user, date, score))
-        else:
-            scores = highscores.get_highscores()
-            difficulty_scores = scores.get(self.difficulty)
-            min_score = (
-                min(difficulty_scores, key=lambda x: x[-1])
-                if difficulty_scores
-                else None
-            )
-            if len(difficulty_scores) < 5:
-                difficulty_scores.append((user, date, score))
-            elif min_score and score > min_score[1]:
-                difficulty_scores[-1] = (
-                    user,
-                    date,
-                    score,
-                )
-            difficulty_scores.sort(key=lambda x: x[-1], reverse=True)
-
-        with open(savefile, "w") as f:
-            json.dump(scores, f, indent=4)

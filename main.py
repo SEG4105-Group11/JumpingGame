@@ -27,7 +27,7 @@ while True:
             main_menu.draw_main_menu(org_w, g)
         case "game":
             g.draw_game()
-            org_w.blit(g.window, next(g.offset))
+            org_w.blit(g.window, (0, 0))
         case "gameover":
             game_over.draw_game_over(org_w, g)
 
