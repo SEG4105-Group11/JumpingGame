@@ -19,6 +19,14 @@ def draw_game_over(window, game):
     game_over_rect.top = padding
     window.blit(game_over, game_over_rect)
 
+    difficulty = globals.font.render(
+        f"High Scores ({game.difficulty})", True, colors.red
+    )
+    difficulty_rect = difficulty.get_rect()
+    difficulty_rect.center = center
+    difficulty_rect.top = game_over_rect.bottom + padding
+    window.blit(difficulty, difficulty_rect)
+
     play_again = globals.font.render("Play Again", True, colors.red)
     play_again_rect = play_again.get_rect()
     play_again_rect.center = center
