@@ -1,3 +1,4 @@
+import itertools
 import pygame
 import globals
 from timer import Timer
@@ -6,6 +7,24 @@ from projectiles import Projectiles
 from polygon import Polygon
 from polygons import Polygons
 from character import Character
+
+
+# REFERENCE: https://github.com/kidscancode/gamedev/blob/master/tutorials/examples/shake.py#L27
+# this function creates our shake-generator
+# it "moves" the screen to the left and right
+# three times by yielding (-5, 0), (-10, 0),
+# ... (-20, 0), (-15, 0) ... (20, 0) three times,
+# then keeps yielding (0, 0)
+def shake():
+    s = -1
+    for _ in range(0, 3):
+        for x in range(0, 20, 5):
+            yield (x * s, 0)
+        for x in range(20, 0, 5):
+            yield (x * s, 0)
+        s *= -1
+    while True:
+        yield (0, 0)
 
 
 class Game:
@@ -24,6 +43,7 @@ class Game:
         self.bg = pygame.image.load("images/bg.jpg")
         self.difficulty = None
         self.timer = Timer()
+        self.offset = itertools.repeat((0, 0))
 
     def pause(self):
         self.timer.pause()
@@ -132,6 +152,7 @@ class Game:
         for p in self.collided_polygons:
             if p not in self.polygon_lost_lives and self.char.lives - 1 >= 0:
                 self.char.lives -= 1
+                self.offset = shake()
                 self.polygon_lost_lives.append(p)
                 self.collided_polygons.remove(p)
 
@@ -139,6 +160,7 @@ class Game:
         for p in self.collided_projectiles:
             if p not in self.projectile_lost_lives and self.char.lives - 1 >= 0:
                 self.char.lives -= 1
+                self.offset = shake()
                 self.projectile_lost_lives.append(p)
                 self.collided_projectiles.remove(p)
 
