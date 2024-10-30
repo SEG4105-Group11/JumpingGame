@@ -1,5 +1,6 @@
-import globals
 import colors
+import globals
+import highscores
 import pygame
 
 
@@ -26,6 +27,18 @@ def draw_game_over(window, game):
     difficulty_rect.center = center
     difficulty_rect.top = game_over_rect.bottom + padding
     window.blit(difficulty, difficulty_rect)
+
+    scores = highscores.get_highscores().get(game.difficulty, [])
+    prev_rect = difficulty_rect
+    for score in scores:
+        score = globals.font.render(
+            f"{score[0]}    {score[1]}    {score[2]}", True, colors.red
+        )
+        score_rect = score.get_rect()
+        score_rect.center = center
+        score_rect.top = prev_rect.bottom + padding
+        prev_rect = score_rect
+        window.blit(score, score_rect)
 
     play_again = globals.font.render("Play Again", True, colors.red)
     play_again_rect = play_again.get_rect()
