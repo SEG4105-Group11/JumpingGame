@@ -23,6 +23,8 @@ while True:
         quit()
 
     match globals.global_mode:
+        case "level":
+            main_menu.draw_level_menu(org_w, g)
         case "menu":
             main_menu.draw_main_menu(org_w, g)
         case "game":
