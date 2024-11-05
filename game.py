@@ -49,6 +49,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.bg = pygame.image.load("images/bg.jpg")
         self.difficulty = None
+        self.level = None
         self.timer = Timer()
         self.offset = itertools.repeat((0, 0))
 
