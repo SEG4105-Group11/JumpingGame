@@ -1,5 +1,6 @@
 import globals
 import highscores
+import settings
 import utils
 
 import datetime
@@ -111,10 +112,17 @@ class Game:
 
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_a] and self.char.x - self.char.vel >= 0:
+        move_left_keys = [
+            pygame.key.key_code(k) for k in settings.data.get("Move Left")
+        ]
+        move_right_keys = [
+            pygame.key.key_code(k) for k in settings.data.get("Move Right")
+        ]
+        jump_keys = [pygame.key.key_code(k) for k in settings.data.get("Jump")]
+        if any(keys[k] for k in move_left_keys) and self.char.x - self.char.vel >= 0:
             self.char.move_left()
         elif (
-            keys[pygame.K_d]
+            any(keys[k] for k in move_right_keys)
             and self.char.x + self.char.vel <= globals.SCREENWIDTH - self.char.width
         ):
             self.char.move_right()
@@ -122,7 +130,7 @@ class Game:
             self.char.set_standing()
 
         if not self.char.isJump:
-            if keys[pygame.K_SPACE]:
+            if any(keys[k] for k in jump_keys):
                 self.char.set_jump()
         else:
             self.char.jump()
