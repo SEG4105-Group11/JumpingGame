@@ -1,9 +1,11 @@
 import pygame
 import globals
 import colors
+import settings
 
 
 main_menu_bg = pygame.image.load("images/main_menu.png")
+
 
 def draw_level_menu(window, game):
     padding = 20
@@ -17,18 +19,15 @@ def draw_level_menu(window, game):
     l3 = globals.font.render("<Name of level 3>", True, colors.red)
     l3_rect = l3.get_rect()
 
-    level_rects = [
-        (level, level_rect),
-        (l1, l1_rect),
-        (l2, l2_rect),
-        (l3, l3_rect)
-    ]
+    level_rects = [(level, level_rect), (l1, l1_rect), (l2, l2_rect), (l3, l3_rect)]
 
     rects_height = sum([rect.height for (_, rect) in level_rects]) + (
         (len(level_rects) - 1) * padding
     )
 
     window.blit(main_menu_bg, (0, 0))
+
+    settings_icon_rect = settings.draw_settings_icon(window)
 
     y = (globals.SCREENHEIGHT - rects_height) // 2
     x = globals.SCREENWIDTH // 2
@@ -40,15 +39,19 @@ def draw_level_menu(window, game):
     if pygame.event.get(pygame.MOUSEBUTTONUP):
         mouse_pos = pygame.mouse.get_pos()
 
-        if l1_rect.collidepoint(mouse_pos):
-            game.__level = "l1"
+        if settings_icon_rect.collidepoint(mouse_pos):
+            settings.prev_mode = globals.global_mode
+            globals.global_mode = "settings"
+        elif l1_rect.collidepoint(mouse_pos):
+            game.level = "l1"
         elif l2_rect.collidepoint(mouse_pos):
-            game.__level = "l2"
+            game.level = "l2"
         elif l3_rect.collidepoint(mouse_pos):
-            game.__level = "l3"
+            game.level = "l3"
 
-        if game.__level:
+        if game.level:
             globals.global_mode = "menu"
+
 
 def draw_main_menu(window, game):
     padding = 20
@@ -77,6 +80,8 @@ def draw_main_menu(window, game):
 
     window.blit(main_menu_bg, (0, 0))
 
+    settings_icon_rect = settings.draw_settings_icon(window)
+
     y = (globals.SCREENHEIGHT - rects_height) // 2
     x = globals.SCREENWIDTH // 2
     for text, rect in text_rects:
@@ -87,7 +92,10 @@ def draw_main_menu(window, game):
     if pygame.event.get(pygame.MOUSEBUTTONUP):
         mouse_pos = pygame.mouse.get_pos()
 
-        if easy_rect.collidepoint(mouse_pos):
+        if settings_icon_rect.collidepoint(mouse_pos):
+            settings.prev_mode = globals.global_mode
+            globals.global_mode = "settings"
+        elif easy_rect.collidepoint(mouse_pos):
             game.difficulty = "easy"
         elif medium_rect.collidepoint(mouse_pos):
             game.difficulty = "medium"
