@@ -60,6 +60,12 @@ class Game:
     def resume(self):
         self.timer.resume()
 
+    def reset(self):
+        self.difficulty = None
+        self.level = None
+        self.timer = Timer()
+        self.offset = itertools.repeat((0, 0))
+
     def initialize(self):
         assert (
             self.difficulty is not None
