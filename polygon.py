@@ -10,7 +10,9 @@ class Polygon:
         self.c4 = c4
 
     def is_collision(self, char):
-        return (char.y + char.height >= self.c2[1]) and (char.x + char.width >= self.c1[0] and char.x <= self.c4[0])
+        return (char.y + char.height >= self.c2[1]) and (
+            char.x + char.width >= self.c1[0] and char.x <= self.c4[0]
+        )
 
     def is_off_screen(self):
         return self.c4[0] <= 0

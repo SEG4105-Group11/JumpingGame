@@ -13,7 +13,15 @@ class Projectile:
         self.x = self.x - Projectile.VELOCITY
 
     def is_collision(self, char):
-        if (char.x - Projectile.RADIUS <= self.x - Projectile.RADIUS <= char.x + char.width) and (char.y <= self.y + Projectile.RADIUS <= char.y + char.height + Projectile.RADIUS):
+        if (
+            char.x - Projectile.RADIUS
+            <= self.x - Projectile.RADIUS
+            <= char.x + char.width
+        ) and (
+            char.y
+            <= self.y + Projectile.RADIUS
+            <= char.y + char.height + Projectile.RADIUS
+        ):
             return True
 
         return False
