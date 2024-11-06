@@ -50,4 +50,5 @@ def draw_game_over(window, game):
         mouse_pos = pygame.mouse.get_pos()
 
         if play_again_rect.collidepoint(mouse_pos):
+            game.reset()
             globals.global_mode = "menu"
