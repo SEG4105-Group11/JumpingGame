@@ -65,6 +65,8 @@ class Game:
         self.level = None
         self.timer = Timer()
         self.offset = itertools.repeat((0, 0))
+        Polygon.VELOCITY = 5
+        Projectile.VELOCITY = 10
 
     def initialize(self):
         assert (
