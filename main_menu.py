@@ -12,11 +12,11 @@ def draw_level_menu(window, game):
 
     level = globals.font.render("Choose the level you want to play: ", True, colors.red)
     level_rect = level.get_rect()
-    l1 = globals.font.render("<Name of level 1>", True, colors.red)
+    l1 = globals.font.render("Night Stars", True, colors.red)
     l1_rect = l1.get_rect()
-    l2 = globals.font.render("<Name of level 2>", True, colors.red)
+    l2 = globals.font.render("Pixel monsters", True, colors.red)
     l2_rect = l2.get_rect()
-    l3 = globals.font.render("<Name of level 3>", True, colors.red)
+    l3 = globals.font.render("Scary wolf", True, colors.red)
     l3_rect = l3.get_rect()
 
     level_rects = [(level, level_rect), (l1, l1_rect), (l2, l2_rect), (l3, l3_rect)]
@@ -44,10 +44,13 @@ def draw_level_menu(window, game):
             globals.global_mode = "settings"
         elif l1_rect.collidepoint(mouse_pos):
             game.level = "l1"
+            game.bg = pygame.image.load("images/level_1_bg.png")
         elif l2_rect.collidepoint(mouse_pos):
             game.level = "l2"
+            game.bg = pygame.image.load("images/level_2_bg.png")
         elif l3_rect.collidepoint(mouse_pos):
             game.level = "l3"
+            game.bg = pygame.image.load("images/level_3_bg.png")
 
         if game.level:
             globals.global_mode = "menu"
