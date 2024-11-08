@@ -10,13 +10,15 @@ main_menu_bg = pygame.image.load("images/main_menu.png")
 def draw_level_menu(window, game):
     padding = 20
 
-    level = globals.font.render("Choose the level you want to play: ", True, colors.red)
+    level = globals.font.render(
+        "Choose the level you want to play: ", True, colors.dark_brown
+    )
     level_rect = level.get_rect()
-    l1 = globals.font.render("Night Stars", True, colors.red)
+    l1 = globals.font.render("Night Stars", True, colors.dark_brown)
     l1_rect = l1.get_rect()
-    l2 = globals.font.render("Pixel monsters", True, colors.red)
+    l2 = globals.font.render("Pixel monsters", True, colors.dark_brown)
     l2_rect = l2.get_rect()
-    l3 = globals.font.render("Scary wolf", True, colors.red)
+    l3 = globals.font.render("Scary wolf", True, colors.dark_brown)
     l3_rect = l3.get_rect()
 
     level_rects = [(level, level_rect), (l1, l1_rect), (l2, l2_rect), (l3, l3_rect)]
@@ -45,12 +47,15 @@ def draw_level_menu(window, game):
         elif l1_rect.collidepoint(mouse_pos):
             game.level = "l1"
             game.bg = pygame.image.load("images/level_1_bg.png")
+            globals.main_color = colors.yellow
         elif l2_rect.collidepoint(mouse_pos):
             game.level = "l2"
             game.bg = pygame.image.load("images/level_2_bg.png")
+            globals.main_color = colors.blue
         elif l3_rect.collidepoint(mouse_pos):
             game.level = "l3"
             game.bg = pygame.image.load("images/level_3_bg.png")
+            globals.main_color = colors.blue
 
         if game.level:
             globals.global_mode = "menu"
@@ -59,15 +64,15 @@ def draw_level_menu(window, game):
 def draw_main_menu(window, game):
     padding = 20
 
-    difficulty = globals.font.render("Choose your difficulty:", True, colors.red)
+    difficulty = globals.font.render("Choose your difficulty:", True, colors.dark_brown)
     difficulty_rect = difficulty.get_rect()
-    easy = globals.font.render("Easy", True, colors.red)
+    easy = globals.font.render("Easy", True, colors.dark_brown)
     easy_rect = easy.get_rect()
-    medium = globals.font.render("Medium", True, colors.red)
+    medium = globals.font.render("Medium", True, colors.dark_brown)
     medium_rect = medium.get_rect()
-    hard = globals.font.render("Hard", True, colors.red)
+    hard = globals.font.render("Hard", True, colors.dark_brown)
     hard_rect = hard.get_rect()
-    god = globals.font.render("God", True, colors.red)
+    god = globals.font.render("God", True, colors.dark_brown)
     god_rect = god.get_rect()
 
     text_rects = [

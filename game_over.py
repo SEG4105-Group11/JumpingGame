@@ -13,7 +13,7 @@ def draw_game_over(window, game):
     game_over = globals.font.render(
         f"Game Over! You were alive for {game.timer.get_time():.4} seconds.",
         True,
-        colors.red,
+        globals.main_color,
     )
     game_over_rect = game_over.get_rect()
     game_over_rect.center = center
@@ -21,7 +21,7 @@ def draw_game_over(window, game):
     window.blit(game_over, game_over_rect)
 
     difficulty = globals.font.render(
-        f"High Scores ({game.difficulty})", True, colors.red
+        f"High Scores ({game.difficulty})", True, globals.main_color
     )
     difficulty_rect = difficulty.get_rect()
     difficulty_rect.center = center
@@ -32,7 +32,7 @@ def draw_game_over(window, game):
     prev_rect = difficulty_rect
     for score in scores:
         score = globals.font.render(
-            f"{score[0]}    {score[1]}    {score[2]}", True, colors.red
+            f"{score[0]}    {score[1]}    {score[2]}", True, globals.main_color
         )
         score_rect = score.get_rect()
         score_rect.center = center
@@ -40,7 +40,7 @@ def draw_game_over(window, game):
         prev_rect = score_rect
         window.blit(score, score_rect)
 
-    play_again = globals.font.render("Play Again", True, colors.red)
+    play_again = globals.font.render("Play Again", True, globals.main_color)
     play_again_rect = play_again.get_rect()
     play_again_rect.center = center
     play_again_rect.bottom = globals.SCREENHEIGHT - padding
@@ -51,4 +51,4 @@ def draw_game_over(window, game):
 
         if play_again_rect.collidepoint(mouse_pos):
             game.reset()
-            globals.global_mode = "menu"
+            globals.global_mode = "level"
