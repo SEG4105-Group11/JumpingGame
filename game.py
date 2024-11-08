@@ -1,3 +1,4 @@
+import colors
 import globals
 import highscores
 import settings
@@ -36,7 +37,6 @@ def shake():
 
 
 class Game:
-
     # (lives, block_velocity_multiplier, projectile_velocity_multiplier)
     difficulty_parameters = {
         "easy": (10, 0.5, 0.5),
@@ -150,7 +150,9 @@ class Game:
 
         # Draw polygons
         for p in self.polygons.polygons:
-            pygame.draw.polygon(self.window, (255, 0, 0), [p.c1, p.c2, p.c3, p.c4])
+            pygame.draw.polygon(
+                self.window, globals.main_color, [p.c1, p.c2, p.c3, p.c4]
+            )
 
         # Create next projectile
         self.previous_projectile = self.projectiles.create_next(
@@ -159,7 +161,7 @@ class Game:
 
         # Draw projectiles
         for p in self.projectiles.projectiles:
-            pygame.draw.circle(self.window, (255, 0, 0), (p.x, p.y), p.RADIUS)
+            pygame.draw.circle(self.window, globals.main_color, (p.x, p.y), p.RADIUS)
 
         # Check Projectile collision
         for p in self.projectiles.projectiles:
@@ -221,7 +223,7 @@ class Game:
             self.window.blit(self.char.char_img, (self.char.x, self.char.y))
 
         lives_left = globals.font.render(
-            "Lives left: " + str(self.char.lives), True, (255, 0, 0)
+            "Lives left: " + str(self.char.lives), True, globals.main_color
         )
         text_lives_left = lives_left.get_rect()
         text_size = globals.font.size("Lives left: " + str(self.char.lives))
@@ -229,7 +231,9 @@ class Game:
         self.window.blit(lives_left, text_lives_left)
 
         time_alive = f"{self.timer.get_time():.4}"
-        score = globals.font.render("Time Alive: " + time_alive, True, (255, 0, 0))
+        score = globals.font.render(
+            "Time Alive: " + time_alive, True, globals.main_color
+        )
         text_score = score.get_rect()
         text_size = globals.font.size("Time Alive: " + time_alive)
         text_score.center = (int(text_size[0] / 2) + 10, 50)
