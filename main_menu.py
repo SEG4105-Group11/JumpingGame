@@ -64,15 +64,17 @@ def draw_level_menu(window, game):
 def draw_main_menu(window, game):
     padding = 20
 
-    difficulty = globals.font.render("Choose your difficulty:", True, colors.black)
+    difficulty = globals.font.render(
+        "Choose your difficulty:", True, globals.main_color
+    )
     difficulty_rect = difficulty.get_rect()
-    easy = globals.font.render("Easy", True, colors.black)
+    easy = globals.font.render("Easy", True, globals.main_color)
     easy_rect = easy.get_rect()
-    medium = globals.font.render("Medium", True, colors.black)
+    medium = globals.font.render("Medium", True, globals.main_color)
     medium_rect = medium.get_rect()
-    hard = globals.font.render("Hard", True, colors.black)
+    hard = globals.font.render("Hard", True, globals.main_color)
     hard_rect = hard.get_rect()
-    god = globals.font.render("God", True, colors.black)
+    god = globals.font.render("God", True, globals.main_color)
     god_rect = god.get_rect()
 
     text_rects = [
@@ -86,7 +88,7 @@ def draw_main_menu(window, game):
         (len(text_rects) - 1) * padding
     )
 
-    window.blit(main_menu_bg, (0, 0))
+    window.blit(game.bg, (0, 0))
 
     settings_icon_rect = settings.draw_settings_icon(window)
 
