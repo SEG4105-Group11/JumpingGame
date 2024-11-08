@@ -9,7 +9,9 @@ def get_save_dir():
         "darwin": "~/Library/Application Support",
     }
     sys_path = system_paths.get(sys.platform)
-    savefile = os.path.normpath(
+    savedir = os.path.normpath(
         os.path.expanduser(os.path.join(sys_path, "jumping_game"))
     )
-    return savefile
+    if not os.path.exists(savedir):
+        os.mkdir(savedir)
+    return savedir
