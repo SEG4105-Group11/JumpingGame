@@ -1,4 +1,3 @@
-import colors
 import globals
 import highscores
 import settings
@@ -43,6 +42,12 @@ class Game:
         "medium": (5, 1, 1),
         "hard": (3, 1.5, 1.5),
         "god": (1, 2, 2),
+    }
+
+    projectile_types = {
+        "l1": None,
+        "l2": "sine",
+        "l3": "helix",
     }
 
     def __init__(self, window):
@@ -92,12 +97,27 @@ class Game:
 
         # Projectile setup
         Projectile.VELOCITY *= self.difficulty_parameters[self.difficulty][2]
-        self.projectiles = Projectiles()
-        first_projectile = Projectile(
-            globals.SCREENWIDTH - Projectile.RADIUS,
-            globals.SCREENHEIGHT - 2 * Character.height,
-        )
-        self.projectiles.add_projectile(first_projectile)
+        self.projectiles = Projectiles(Game.projectile_types[self.level])
+        if self.level == "l3":
+            first_projectile = Projectile(
+                globals.SCREENWIDTH - Projectile.RADIUS,
+                globals.SCREENHEIGHT - 2 * Character.height,
+                type="sine",
+            )
+            self.projectiles.add_projectile(first_projectile)
+            first_projectile = Projectile(
+                globals.SCREENWIDTH - Projectile.RADIUS,
+                globals.SCREENHEIGHT - 2 * Character.height,
+                type="cosine",
+            )
+            self.projectiles.add_projectile(first_projectile)
+        else:
+            first_projectile = Projectile(
+                globals.SCREENWIDTH - Projectile.RADIUS,
+                globals.SCREENHEIGHT - 2 * Character.height,
+                type=Game.projectile_types[self.level],
+            )
+            self.projectiles.add_projectile(first_projectile)
         self.previous_projectile = first_projectile
         self.collided_projectiles = []
         self.projectile_lost_lives = []
