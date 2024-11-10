@@ -7,11 +7,17 @@ class Character:
     lives = 10
     width = 24
     height = 47
-    walk_left = [pygame.image.load("images/L1.png"), pygame.image.load("images/L2.png"),
-                 pygame.image.load("images/L3.png"), pygame.image.load("images/L4.png"),
-                 pygame.image.load("images/L5.png"), pygame.image.load("images/L6.png"),
-                 pygame.image.load("images/L7.png"), pygame.image.load("images/L8.png"),
-                 pygame.image.load("images/L9.png")]
+    walk_left = [
+        pygame.image.load("images/L1.png"),
+        pygame.image.load("images/L2.png"),
+        pygame.image.load("images/L3.png"),
+        pygame.image.load("images/L4.png"),
+        pygame.image.load("images/L5.png"),
+        pygame.image.load("images/L6.png"),
+        pygame.image.load("images/L7.png"),
+        pygame.image.load("images/L8.png"),
+        pygame.image.load("images/L9.png"),
+    ]
     walk_right = [pygame.transform.flip(img, True, False) for img in walk_left]
     char_img = pygame.image.load("images/standing.png")
 
@@ -56,7 +62,7 @@ class Character:
                 neg = -1
             if self.jump_count == 0:
                 neg = 0
-            self.y -= self.jump_count + (0.2*(self.jump_count**2)*neg)
+            self.y -= self.jump_count + (0.2 * (self.jump_count**2) * neg)
             self.jump_count -= 1
         else:
             self.isJump = False

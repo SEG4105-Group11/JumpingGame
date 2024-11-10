@@ -5,21 +5,28 @@ class Projectile:
     RADIUS = 10
     VELOCITY = 10
 
-    SIN_AMPLITUDE = 5
-    SIN_FREQ = 5
+    SIN_AMPLITUDE = 10
+    SIN_FREQ = 2
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, type=None):
         self.x = x
+        self.start_y = y
         self.y = y
+        self.type = type
 
     def is_off_screen(self):
         return self.x <= Projectile.RADIUS
 
     def move(self):
         self.x = self.x - Projectile.VELOCITY
-        self.y = self.y + Projectile.SIN_AMPLITUDE * math.sin(
-            Projectile.SIN_FREQ * math.radians(self.x % 360)
-        )
+        if self.type == "sine":
+            self.y = self.start_y + Projectile.SIN_AMPLITUDE * math.sin(
+                Projectile.SIN_FREQ * math.radians(self.x)
+            )
+        elif self.type == "cosine":
+            self.y = self.start_y + Projectile.SIN_AMPLITUDE * math.cos(
+                Projectile.SIN_FREQ * math.radians(self.x)
+            )
 
     def is_collision(self, char):
         if (

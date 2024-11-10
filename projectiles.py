@@ -8,8 +8,9 @@ class Projectiles:
     MIN_DISTANCE = 200
     MAX_DISTANCE = 250
 
-    def __init__(self):
+    def __init__(self, type=None):
         self.projectiles = []
+        self.type = type
 
     def add_projectile(self, p):
         self.projectiles.append(p)
@@ -27,10 +28,26 @@ class Projectiles:
     def create_next(self, prev, screenwidth):
         distance = random.randint(Projectiles.MIN_DISTANCE, Projectiles.MAX_DISTANCE)
         if prev.x + distance - Projectile.RADIUS <= screenwidth:
-            next_projectile = Projectile(
-                prev.x + distance, globals.SCREENHEIGHT - 2 * Character.height
-            )
-            self.add_projectile(next_projectile)
+            if self.type == "helix":
+                next_projectile = Projectile(
+                    prev.x + distance,
+                    globals.SCREENHEIGHT - 2 * Character.height,
+                    type="sine",
+                )
+                self.add_projectile(next_projectile)
+                next_projectile = Projectile(
+                    prev.x + distance,
+                    globals.SCREENHEIGHT - 2 * Character.height,
+                    type="cosine",
+                )
+                self.add_projectile(next_projectile)
+            else:
+                next_projectile = Projectile(
+                    prev.x + distance,
+                    globals.SCREENHEIGHT - 2 * Character.height,
+                    type=self.type,
+                )
+                self.add_projectile(next_projectile)
             prev = next_projectile
 
         return prev

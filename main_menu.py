@@ -2,6 +2,8 @@ import pygame
 import globals
 import colors
 import settings
+from character import Character
+from projectile import Projectile
 
 
 main_menu_bg = pygame.image.load("images/main_menu.png")
@@ -52,10 +54,13 @@ def draw_level_menu(window, game):
             game.level = "l2"
             game.bg = pygame.image.load("images/level_2_bg.png")
             globals.main_color = colors.pink
+            Projectile.SIN_AMPLITUDE = Character.height
         elif l3_rect.collidepoint(mouse_pos):
             game.level = "l3"
             game.bg = pygame.image.load("images/level_3_bg.png")
             globals.main_color = colors.red
+            Projectile.SIN_AMPLITUDE = 2 * Character.height
+            Projectile.SIN_FREQ = 0.5
 
         if game.level:
             globals.global_mode = "menu"
