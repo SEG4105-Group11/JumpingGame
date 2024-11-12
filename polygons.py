@@ -6,8 +6,9 @@ class Polygons:
     MIN_DISTANCE = 200
     MAX_DISTANCE = 250
 
-    def __init__(self):
+    def __init__(self, lvl):
         self.polygons = []
+        self.lvl = lvl
 
     def add_polygon(self, p):
         self.polygons.append(p)
@@ -30,7 +31,7 @@ class Polygons:
         coord4 = (prev.c4[0] + distance, prev.c4[1])
 
         if coord1[0] <= screenwidth:
-            next_polygon = Polygon(coord1, coord2, coord3, coord4)
+            next_polygon = Polygon(coord1, coord2, coord3, coord4, self.lvl)
             self.add_polygon(next_polygon)
             prev = next_polygon
 

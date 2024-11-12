@@ -80,7 +80,7 @@ class Game:
 
         # Polygon setup
         Polygon.VELOCITY *= self.difficulty_parameters[self.difficulty][1]
-        self.polygons = Polygons()
+        self.polygons = Polygons(self.level)
         first_polygon = Polygon(
             (globals.SCREENWIDTH // 3, globals.SCREENHEIGHT),
             (globals.SCREENWIDTH // 3, globals.SCREENHEIGHT - Polygon.LENGTH),
@@ -89,6 +89,7 @@ class Game:
                 globals.SCREENHEIGHT - Polygon.LENGTH,
             ),
             (globals.SCREENWIDTH // 3 + Polygon.LENGTH, globals.SCREENHEIGHT),
+            self.level
         )
         self.polygons.add_polygon(first_polygon)
         self.previous_polygon = first_polygon
