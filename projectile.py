@@ -5,8 +5,8 @@ class Projectile:
     RADIUS = 10
     VELOCITY = 10
 
-    SIN_AMPLITUDE = 10
-    SIN_FREQ = 2
+    SIN_AMPLITUDE: float = 10
+    SIN_FREQ: float = 2
 
     def __init__(self, x, y, type=None):
         self.x = x
