@@ -7,6 +7,7 @@ from projectile import Projectile
 
 
 main_menu_bg = pygame.image.load("images/main_menu.png")
+back_btn_img = pygame.image.load("images/back-button.png")
 
 
 def draw_level_menu(window, game):
@@ -95,6 +96,28 @@ def draw_main_menu(window, game):
 
     window.blit(game.bg, (0, 0))
 
+    back_btn_width, back_btn__height = 48, 48
+    back_btn_rect = pygame.Rect(
+        (24, 24),
+        (back_btn_width, back_btn__height),
+    )
+    pygame.draw.rect(window, colors.gray, back_btn_rect, border_radius=8)
+
+    icon_scale = 0.9
+    window.blit(
+        pygame.transform.scale(
+            back_btn_img,
+            (
+                icon_scale * back_btn_rect.width,
+                icon_scale * back_btn_rect.height,
+            ),
+        ),
+        (
+            back_btn_rect.left + ((1 - icon_scale) * back_btn_rect.width) // 2,
+            back_btn_rect.top + ((1 - icon_scale) * back_btn_rect.height) // 2,
+        ),
+    )
+
     settings_icon_rect = settings.draw_settings_icon(window)
 
     y = (globals.SCREENHEIGHT - rects_height) // 2
@@ -110,6 +133,8 @@ def draw_main_menu(window, game):
         if settings_icon_rect.collidepoint(mouse_pos):
             settings.prev_mode = globals.global_mode
             globals.global_mode = "settings"
+        elif back_btn_rect.collidepoint(mouse_pos):
+            globals.global_mode = "level"
         elif easy_rect.collidepoint(mouse_pos):
             game.difficulty = "easy"
         elif medium_rect.collidepoint(mouse_pos):
