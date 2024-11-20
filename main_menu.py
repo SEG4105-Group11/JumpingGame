@@ -136,13 +136,13 @@ def draw_main_menu(window, game):
         elif back_btn_rect.collidepoint(mouse_pos):
             globals.global_mode = "level"
         elif easy_rect.collidepoint(mouse_pos):
-            game.difficulty = "easy"
+            game.difficulty = "Easy"
         elif medium_rect.collidepoint(mouse_pos):
-            game.difficulty = "medium"
+            game.difficulty = "Medium"
         elif hard_rect.collidepoint(mouse_pos):
-            game.difficulty = "hard"
+            game.difficulty = "Hard"
         elif god_rect.collidepoint(mouse_pos):
-            game.difficulty = "god"
+            game.difficulty = "God"
 
         if game.difficulty:
             globals.global_mode = "game"
