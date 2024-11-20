@@ -45,9 +45,9 @@ class Game:
     }
 
     projectile_types = {
-        "l1": None,
-        "l2": "sine",
-        "l3": "helix",
+        "Night Stars": None,
+        "Pixel Monsters": "sine",
+        "Scary Wolf": "helix",
     }
 
     def __init__(self, window):
@@ -89,7 +89,7 @@ class Game:
                 globals.SCREENHEIGHT - Polygon.LENGTH,
             ),
             (globals.SCREENWIDTH // 3 + Polygon.LENGTH, globals.SCREENHEIGHT),
-            self.level
+            self.level,
         )
         self.polygons.add_polygon(first_polygon)
         self.previous_polygon = first_polygon
@@ -99,7 +99,7 @@ class Game:
         # Projectile setup
         Projectile.VELOCITY *= self.difficulty_parameters[self.difficulty][2]
         self.projectiles = Projectiles(Game.projectile_types[self.level])
-        if self.level == "l3":
+        if self.level == "Scary Wolf":
             first_projectile = Projectile(
                 globals.SCREENWIDTH - Projectile.RADIUS,
                 globals.SCREENHEIGHT - 2 * Character.height,
@@ -273,11 +273,15 @@ class Game:
 
         savefile = os.path.join(save_dir, "highscores.json")
         if not os.path.exists(savefile):
-            scores = {k: [] for k in self.difficulty_parameters}
-            scores[self.difficulty].append((user, date, score))
+            scores = {}
+            for difficulty in self.difficulty_parameters:
+                scores[difficulty] = {}
+                for level in self.projectile_types:
+                    scores[difficulty][level] = []
+            scores[self.difficulty][self.level].append((user, date, score))
         else:
             scores = highscores.get_highscores()
-            difficulty_scores = scores.get(self.difficulty, [])
+            difficulty_scores = scores.get(self.difficulty, {}).get(self.level, [])
             min_score = (
                 min(difficulty_scores, key=lambda x: x[-1])
                 if difficulty_scores

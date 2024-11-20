@@ -19,9 +19,9 @@ def draw_level_menu(window, game):
     level_rect = level.get_rect()
     l1 = globals.font.render("Night Stars", True, colors.black)
     l1_rect = l1.get_rect()
-    l2 = globals.font.render("Pixel monsters", True, colors.black)
+    l2 = globals.font.render("Pixel Monsters", True, colors.black)
     l2_rect = l2.get_rect()
-    l3 = globals.font.render("Scary wolf", True, colors.black)
+    l3 = globals.font.render("Scary Wolf", True, colors.black)
     l3_rect = l3.get_rect()
 
     level_rects = [(level, level_rect), (l1, l1_rect), (l2, l2_rect), (l3, l3_rect)]
@@ -48,16 +48,16 @@ def draw_level_menu(window, game):
             settings.prev_mode = globals.global_mode
             globals.global_mode = "settings"
         elif l1_rect.collidepoint(mouse_pos):
-            game.level = "l1"
+            game.level = "Night Stars"
             game.bg = pygame.image.load("images/level_1_bg.png")
             globals.main_color = colors.yellow
         elif l2_rect.collidepoint(mouse_pos):
-            game.level = "l2"
+            game.level = "Pixel Monsters"
             game.bg = pygame.image.load("images/level_2_bg.png")
             globals.main_color = colors.pink
             Projectile.SIN_AMPLITUDE = Character.height
         elif l3_rect.collidepoint(mouse_pos):
-            game.level = "l3"
+            game.level = "Scary Wolf"
             game.bg = pygame.image.load("images/level_3_bg.png")
             globals.main_color = colors.red
             Projectile.SIN_AMPLITUDE = 2 * Character.height

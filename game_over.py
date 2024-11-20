@@ -21,14 +21,14 @@ def draw_game_over(window, game):
     window.blit(game_over, game_over_rect)
 
     difficulty = globals.font.render(
-        f"High Scores ({game.difficulty})", True, globals.main_color
+        f"High Scores ({game.level}, {game.difficulty})", True, globals.main_color
     )
     difficulty_rect = difficulty.get_rect()
     difficulty_rect.center = center
     difficulty_rect.top = game_over_rect.bottom + padding
     window.blit(difficulty, difficulty_rect)
 
-    scores = highscores.get_highscores().get(game.difficulty, [])
+    scores = highscores.get_highscores().get(game.difficulty, {}).get(game.level, [])
     prev_rect = difficulty_rect
     for score in scores:
         score = globals.font.render(
