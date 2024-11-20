@@ -38,10 +38,10 @@ def shake():
 class Game:
     # (lives, block_velocity_multiplier, projectile_velocity_multiplier)
     difficulty_parameters = {
-        "easy": (10, 0.5, 0.5),
-        "medium": (5, 1, 1),
-        "hard": (3, 1.5, 1.5),
-        "god": (1, 2, 2),
+        "Easy": (10, 0.5, 0.5),
+        "Medium": (5, 1, 1),
+        "Hard": (3, 1.5, 1.5),
+        "God": (1, 2, 2),
     }
 
     projectile_types = {
